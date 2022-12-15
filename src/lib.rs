@@ -19,9 +19,8 @@ pub mod double_list {
     }
 
     pub struct LRUCache {
-        map: HashMap<i32, Option<Rc<RefCell<ListNode>>>>,
-        list: List,
-        size: i32,
+        map: HashMap<i32, Rc<RefCell<ListNode>>>,
+        pub list: List,
         cap: i32,
     }
 
@@ -104,7 +103,7 @@ pub mod double_list {
                 self.tail = Some(t);
                 self.remove_node(node);
             }
-            return ans
+            return ans;
         }
 
         pub fn show_all(&mut self) {
@@ -125,14 +124,40 @@ pub mod double_list {
     }
 
     impl LRUCache {
-
+        pub fn new(capacity: i32)  -> LRUCache{
+            let mut list = List::new();
+            let mut map = HashMap::new();
+            return LRUCache {
+                list: list,
+                map: map,
+                cap: capacity
+            }
+        }
         //TODO
-        pub fn get(key: i32) -> i32{
-            return 0;
+        pub fn get(&mut self, key: i32) -> i32{
+            if let Some(node) = self.map.get(&key) {
+                let val = node.borrow().value;
+                self.list.move_to_head(Some(node.clone()));
+                return val;
+            } else {
+                return -1;
+            }
         }
 
         //TODO
-        pub fn put(key: i32, val: i32) -> i32 {
+        pub fn put(&mut self, key: i32, val: i32) -> i32 {
+            if let Some(node) = self.map.get_mut(&key) {
+                node.borrow_mut().value = val;
+                self.list.move_to_head(Some(node.clone()));
+            } else {
+                if self.list.len == self.cap {
+                    let key = self.list.remove_tail();
+                    self.map.remove(&key);
+                }
+                let new_node = ListNode::new(key, val);
+                self.map.insert(key, new_node.clone());
+                self.list.add_to_head(Some(new_node));
+            }
             return 0;
         }
     }

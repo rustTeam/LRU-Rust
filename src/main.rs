@@ -3,6 +3,7 @@ mod lib;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
+use lib::double_list::LRUCache;
 use lib::double_list::ListNode;
 use lib::double_list::List;
 
@@ -18,9 +19,9 @@ fn test() {
     let node2 = new_rc(2, 2);
     let node3 = new_rc(3, 3);
     mp.insert(1, node1.clone());
-    //println!("{}", list.head.is_none());
+    println!("{}", list.head.is_none());
     list.add_to_head(node1);
-    //println!("{}", list.head.is_none());
+    println!("{}", list.head.is_none());
     list.add_to_head(node2);
     list.add_to_head(node3);
     list.show_all();
@@ -30,8 +31,19 @@ fn test() {
     }
     list.show_all();
 }
-
+fn test2(){
+    let mut lru_cache = LRUCache::new(5);
+    let ans = lru_cache.get(0);
+    lru_cache.put(5,1);
+    lru_cache.put(6, 2);
+    lru_cache.put(7, 3);
+    lru_cache.put(8, 4);
+    lru_cache.put(7, 8);
+    lru_cache.put(1, 8);
+    lru_cache.put(2, 4);
+    lru_cache.list.show_all();
+}
 fn main() {
-    test();
+    test2();
     println!("Hello, world!");
 }
