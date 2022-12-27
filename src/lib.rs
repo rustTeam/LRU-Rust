@@ -29,6 +29,7 @@ pub mod double_list {
         cap: i32,
     }
     pub struct LRUKCache {
+        k: i32,
         hlist: HistoryList,
         lrulist: LRUCache,
     }
@@ -154,7 +155,7 @@ pub mod double_list {
         }
 
         //TODO
-        pub fn put(&mut self, key: i32, val: i32) -> i32 {
+        pub fn put(&mut self, key: i32, val: i32)  {
             if let Some(node) = self.map.get_mut(&key) {
                 node.borrow_mut().value = val;
                 self.list.move_to_head(Some(node.clone()));
@@ -167,7 +168,7 @@ pub mod double_list {
                 self.map.insert(key, new_node.clone());
                 self.list.add_to_head(Some(new_node));
             }
-            return 0;
+
         }
 
 
@@ -233,15 +234,77 @@ pub mod double_list {
     }
 
     impl LRUKCache {
-        pub fn new(hcapa: i32, lcapa: i32) -> LRUKCache {
+        pub fn new(k: i32, hcapa: i32, lcapa: i32) -> LRUKCache {
             let lrul = LRUCache::new(lcapa);
             let hisl = HistoryList::new(hcapa);
             return LRUKCache { 
+                k,
                 hlist: hisl, 
                 lrulist: lrul 
             }
         }
 
         //TODO
+        pub fn get(&mut self, key: i32) -> i32 {
+            let val = self.lrulist.get(key);
+            if val != -1 {
+                return val;
+            } else {
+                let val = self.hlist.get(key);
+                if val == -1 {
+                    return -1;
+                } else {
+                    let cnt = self.hlist.get_cnt(&key);
+                    if *cnt == self.k {
+                        if let Some(node) = self.hlist.node_map.get_mut(&key) {
+                            let val = node.borrow().value;
+                            self.hlist.list.remove_node(Some(node.clone()));
+                            self.hlist.node_map.remove(&key);
+                            self.hlist.cnt_map.remove(&key);
+                            let new_node = ListNode::new(key, val);
+                            self.lrulist.map.insert(key, new_node.clone());
+                            if self.lrulist.list.len == self.lrulist.cap {
+                                let k = self.lrulist.list.remove_tail();
+                                self.lrulist.map.remove(&k);
+                            }
+                            self.lrulist.list.add_to_head(Some(new_node));
+                        }
+                    }
+                    return val;
+                }
+            }
+        }
+
+        pub fn put(&mut self, key: i32, value: i32) {
+            if let Some(node) = self.lrulist.map.get(&key) {
+                self.lrulist.put(key, value);
+            } else {
+                self.hlist.put(key, value);
+                let cnt = self.hlist.get_cnt(&key);
+                if *cnt == self.k {
+                    if let Some(node) = self.hlist.node_map.get(&key) {
+                        let val = node.borrow().value;
+                        self.hlist.list.remove_node(Some(node.clone()));
+                        self.hlist.node_map.remove(&key);
+                        self.hlist.cnt_map.remove(&key);
+                        let new_node = ListNode::new(key, val);
+                        self.lrulist.map.insert(key, new_node.clone());
+                        if self.lrulist.list.len == self.lrulist.cap {
+                            let k = self.lrulist.list.remove_tail();
+                            self.lrulist.map.remove(&k);
+                        }
+                        self.lrulist.list.add_to_head(Some(new_node));
+                    }
+                }
+            }
+        }
+
+        pub fn show(&mut self) {
+            println!("LRUList:");
+            self.lrulist.list.show_all();
+            println!("HistoryList:");
+            self.hlist.show();
+        }
+
     }
 }

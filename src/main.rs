@@ -7,6 +7,7 @@ use lib::double_list::HistoryList;
 use lib::double_list::LRUCache;
 use lib::double_list::ListNode;
 use lib::double_list::List;
+use lib::double_list::LRUKCache;
 
 fn new_rc(k: i32, v: i32)-> Option<Rc<RefCell<ListNode>>> {
     let node = ListNode::new(k, v);
@@ -65,8 +66,33 @@ fn test_history_list() {
     hlist.show();
 }
 
+fn test3() {
+    let mut lrukCache = LRUKCache::new(2,5,6);
+    lrukCache.put(1,1);
+    lrukCache.put(2,2);
+    lrukCache.put(3,3);
+    lrukCache.put(4,4);
+    lrukCache.put(5,5);
+    lrukCache.get(4);
+    lrukCache.get(3);
+    lrukCache.get(2);
+    lrukCache.get(4);
+    lrukCache.put(6,6);
+    lrukCache.put(7,7);
+    lrukCache.put(8,8);
+    lrukCache.put(9,5);
+    lrukCache.put(7,3);
+    lrukCache.put(6,1);
+    lrukCache.put(2,1);
+    lrukCache.put(10,12);
+    lrukCache.put(13,9);
+    lrukCache.put(1,1);
+    lrukCache.show();
+
+}
 fn main() {
     //test2();
-    test_history_list();
+    //test_history_list();
+    test3();
     //println!("Hello, world!");
 }
