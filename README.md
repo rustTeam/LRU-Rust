@@ -198,7 +198,7 @@ pub fn get(&mut self, key: i32) -> i32 {
 ####  put( )函数
 ```rust
 //put()函数，通过键值来更新HistoryList中的对应数据
-pub fn put(&mut self, key: i32) -> i32 {
+pub fn put(&mut self, key: i32, value: i32) {
     ......
 }
 ```
@@ -206,7 +206,7 @@ pub fn put(&mut self, key: i32) -> i32 {
 ####  get_cnt( )函数
 ```rust
 //根据key值获取hlist中cnt_map中的cnt值
-pub fn put(&mut self, key: i32) -> i32 {
+pub fn get_cnt(&mut self, key: &i32) -> &i32 {
     ......
 }
 ```
