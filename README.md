@@ -86,3 +86,168 @@ pub struct LRUKCache {
 }
 ```
 
+## 具体函数介绍
+### 双向链表节点ListNode
+####  new( )函数
+```rust
+//ListNode构造函数，初始化双向链表节点，包括键、值、前后指针
+pub fn new(k: i32, v: i32) -> Rc<RefCell<ListNode>> {
+    ......
+}
+```
+
+####  display( )函数
+```rust
+//输出节点的键、值
+pub fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result  {
+    ......
+}
+```
+
+### 链表List
+####  new( )函数
+```rust
+//List构造函数，初始化链表，包括初始长度0、以双向链表节点ListNode为基础的head头结点指针、tail尾结点指针
+pub fn new() -> List {
+    ......
+}
+```
+
+####  add_to_head( )函数
+```rust
+//将输入的结点加入到链表队首
+pub fn add_to_head(&mut self, node: Option<Rc<RefCell<ListNode>>>) {
+    ......
+}
+```
+
+####  remove_node( )函数
+```rust
+//将输入的结点从链表移出
+pub fn remove_node(&mut self, node: Option<Rc<RefCell<ListNode>>>) {
+    ......
+}
+```
+
+####  move_to_head( )函数
+```rust
+//将输入的结点从链表原先的位置移至链表队首位置，由remove_node()函数和add_to_head()函数组合实现
+pub fn move_to_head(&mut self, node: Option<Rc<RefCell<ListNode>>>) {
+    ......
+}
+```
+
+####  remove_tail( )函数
+```rust
+//使用remove_node()函数去除队尾节点，返回被去除的队尾节点的键
+pub fn remove_tail(&mut self) -> i32 {
+    ......
+}
+```
+
+####  show_all( )函数
+```rust
+//让目前链表里除了head、tail节点外的所有节点按序展示节点信息（键、值）
+pub fn show_all(&mut self) {
+    ......
+}
+```
+
+### LRU缓存列表LRUCache
+####  new( )函数
+```rust
+//LRUCache构造函数，初始化LRU缓存列表，包括链表list、缓存列表容量capacity、储存键与节点映射关系的哈希表map
+pub fn new(capacity: i32)  -> LRUCache {
+    ......
+}
+```
+
+####  get( )函数
+```rust
+//get()函数，通过键值来获取缓存列表中对应数据
+pub fn get(&mut self, key: i32) -> i32 {
+    ......
+}
+```
+
+####  put( )函数
+```rust
+//put()函数，通过键值来更新缓存列表中对应数据
+pub fn put(&mut self, key: i32, val: i32) {
+    ......
+}
+```
+
+### 历史列表HistoryList
+####  new( )函数
+```rust
+//HistoryList构造函数，初始化历史列表，包括链表list、缓存列表容量cap、储存键与节点映射关系的哈希表node_map、储存键与访问次数关系的哈希表cnt_map
+pub fn new(capacity: i32) -> HistoryList {
+    ......
+}
+```
+
+####  get( )函数
+```rust
+//get()函数，通过键值来访问HistoryList中的对应数据
+pub fn get(&mut self, key: i32) -> i32 {
+    ......
+}
+```
+
+####  put( )函数
+```rust
+//put()函数，通过键值来更新HistoryList中的对应数据
+pub fn put(&mut self, key: i32) -> i32 {
+    ......
+}
+```
+
+####  get_cnt( )函数
+```rust
+//根据key值获取hlist中cnt_map中的cnt值
+pub fn put(&mut self, key: i32) -> i32 {
+    ......
+}
+```
+
+####  show( )函数
+```rust
+//展示HistoryList里所有节点的信息
+pub fn show(&mut self) {
+    ......
+}
+```
+
+### LRU-K缓存列表LRUKCache
+####  new( )函数
+```rust
+//LRUKCache构造函数，初始化LRU-K缓存列表，包括访问次数阈值k、历史队列hlist、缓存队列lrulist
+pub fn new(k: i32, hcapa: i32, lcapa: i32) -> LRUKCache {
+    ......
+}
+```
+
+####  get( )函数
+```rust
+//get()函数，通过键值访问对应数据，先去lrulist里寻找，若找不到再去hlist
+pub fn get(&mut self, key: i32) -> i32 {
+    ......
+}
+```
+
+####  put( )函数
+```rust
+//put()函数，通过键值访问对应数据，先去lrulist里寻找，若找不到再去hlist
+pub fn put(&mut self, key: i32, value: i32) {
+    ......
+}
+```
+
+####  show( )函数
+```rust
+//依序展示lrulist和hlist里的节点信息
+pub fn show(&mut self) {
+    ......
+}
+```

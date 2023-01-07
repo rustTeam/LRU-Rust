@@ -87,6 +87,8 @@ fn test3() {
     lrukCache.put(10,12);
     lrukCache.put(13,9);
     lrukCache.put(1,1);
+    lrukCache.put(-1,2);
+    lrukCache.put(-2,3);
     lrukCache.show();
 
 }
